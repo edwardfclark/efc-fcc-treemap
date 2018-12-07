@@ -2,7 +2,15 @@
 <head>
     <script src="d3.min.js"></script>
     <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="menu">
+        <ul>
+            <li><a id="video-game-data-set" data-url="https://cdn.rawgit.com/freeCodeCamp/testable-projects-fcc/a80ce8f9/src/data/tree_map/video-game-sales-data.json" onclick="buildTreemap(event.target.dataset.url)">Video Game Data Set</a></li>
+            <li><a id="movies-data-set" data-url="https://cdn.rawgit.com/freeCodeCamp/testable-projects-fcc/a80ce8f9/src/data/tree_map/movie-data.json" onclick="buildTreemap(event.target.dataset.url)">Movies Data Set</a></li>
+            <li><a id="kickstarter-data-set" data-url="https://cdn.rawgit.com/freeCodeCamp/testable-projects-fcc/a80ce8f9/src/data/tree_map/kickstarter-funding-data.json" onclick="buildTreemap(event.target.dataset.url)">Kickstarter Data Set</a></li>
+        </ul>
+    </div>
     <div id="content"></div>
 </body>
