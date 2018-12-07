@@ -38,13 +38,6 @@ function buildTreemap(url) {
 
         const svg = d3.select("#content").append("svg").attr("width", WIDTH).attr("height", HEIGHT).attr("id", "TEST").append("g");
 
-        //This appends empty g tags, preventing the category headers from being selected and displayed by the code below.
-        /*
-        root.descendants()[0]["children"].forEach(() => {
-            svg.append("g");
-        });
-        */
-
         let nodes = d3.select("svg g")
             .selectAll("g")
             .data(root.leaves())
