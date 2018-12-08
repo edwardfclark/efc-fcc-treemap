@@ -1,7 +1,7 @@
 /* Constants for use in D3 */
 
-const WIDTH = 1800;
-const HEIGHT = 1800;
+const WIDTH = 1000;
+const HEIGHT = 1000;
 const PADDING = {top: 50, right: 0, bottom: 0, left: 0}
 const PADDING_OUTER = 3;
 const PADDING_INNER = 3;
@@ -14,7 +14,7 @@ let tooltipDiv;
 //This is inside window.onload to give access to the DOM inside the function.
 window.onload = () => {
     buildTreemap("https://cdn.rawgit.com/freeCodeCamp/testable-projects-fcc/a80ce8f9/src/data/tree_map/video-game-sales-data.json");
-    tooltipDiv = d3.select("body").append("div").attr("id", "tooltip").style("opacity", 0).style("width", tooltipWidth+"px");
+    tooltipDiv = d3.select("body").append("div").attr("id", "tooltip").style("opacity", 0);
 
 }
 
@@ -61,11 +61,15 @@ function buildTreemap(url) {
                 // .attr(/*data attributes*/)
                    .style("left", (d3.event.pageX)+"px")
                    .style("top", (d3.event.pageY-tooltipHeight)+"px");
+            })
+            .on("mouseout", () => {
+                tooltipDiv.transition().duration(500).style("opacity", 0);
             });
     
             nodes.append("text")
             .attr("dx", 4)
             .attr("dy", 14)
+            // .attr("textLength", (d) => ((d.x1-d.x0) - 10))
             .text((d) => d.data.name);
         
     });

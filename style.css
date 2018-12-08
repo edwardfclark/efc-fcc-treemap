@@ -10,3 +10,23 @@
     pointer-events: none;
     text-align: center;
 }
+
+#menu {
+    width: 800px;
+    margin: 0 auto;
+}
+
+#menu > ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    list-style-type: none;
+}
+
+svg {
+    margin: 0 auto;
+    display: block;
+}
+
+h1 {
+    text-align: center;
+}
