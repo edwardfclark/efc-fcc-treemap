@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400');
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
 #tooltip {	
     position: absolute;			
     text-align: left;			
@@ -22,6 +28,11 @@
     list-style-type: none;
 }
 
+li {
+    cursor: pointer;
+    text-align: center;
+}
+
 svg {
     margin: 0 auto;
     display: block;
@@ -29,4 +40,19 @@ svg {
 
 h1 {
     text-align: center;
+}
+
+h3 {
+    text-align: center;
+    font-weight: 300;
+}
+
+text {
+    font-weight: 300;
+    font-size: 12px;
+}
+
+.legend-square {
+    width: 15px;
+    height: 15px;
 }

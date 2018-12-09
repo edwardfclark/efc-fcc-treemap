@@ -1,9 +1,9 @@
 /* Constants for use in D3 */
 
-const WIDTH = 1000;
-const HEIGHT = 1000;
+const WIDTH = 1300;
+const HEIGHT = 600;
 const PADDING = {top: 50, right: 0, bottom: 0, left: 0}
-const PADDING_OUTER = 3;
+const PADDING_OUTER = 0;
 const PADDING_INNER = 3;
 
 const tooltipWidth = 140;
@@ -26,6 +26,7 @@ function buildTreemap(url) {
     //Clear the inside of #content right before the fetch.
     document.getElementById("content").innerHTML = "";
 
+    //fetch().then() to create a promise and resolve the code this way.
     window.fetch(url)
     .then((response) => {
         return response.json();
@@ -36,10 +37,11 @@ function buildTreemap(url) {
         let root = d3.hierarchy(json);
         root.sum((d) => d.value);
         treemapLayout(root);
-        console.log(root.descendants());
+        console.log(root.leaves());
     
-        let title = d3.select("#content").append("h1").text(root.descendants()[0]["data"]["name"]);
-
+        let name = root.descendants()[0]["data"]["name"];
+        let title = d3.select("#content").append("h1").text(name);
+        let description = d3.select("#content").append("h3").text(`Top 100 ${name == "Kickstarter" ? "Most Pledged" : ""} ${name == "Kickstarter" ? "Kickstarter Campaigns" : name == "Movies" ? "Highest Grossing Movies" : "Video Games Sold"} Grouped By ${name == "Kickstarter" ? "Category" : name == "Movies" ? "Genre" : "Platform"}`);
         const svg = d3.select("#content").append("svg").attr("width", WIDTH).attr("height", HEIGHT).attr("id", "TEST").append("g");
 
         let nodes = d3.select("svg g")
@@ -66,11 +68,40 @@ function buildTreemap(url) {
                 tooltipDiv.transition().duration(500).style("opacity", 0);
             });
     
-            nodes.append("text")
+            //Add a text element to each node.
+            let text = nodes.append("text")
             .attr("dx", 4)
-            .attr("dy", 14)
-            // .attr("textLength", (d) => ((d.x1-d.x0) - 10))
-            .text((d) => d.data.name);
+            .attr("dy", 14);
+
+            //Add a tspan element to each text node for each word in the name.
+            text.selectAll("tspan")
+            .data(d => d.data.name.split(" "))
+            .enter()
+            .append("tspan")
+            .text(d => d)
+            .attr("x", 0)
+            .attr("dx", 5)
+            .attr("dy", 12);
+
+            let categories = [];
+
+            for (i=0;i<root.leaves().length;i++) {
+                if (categories.indexOf(root.leaves()[i]["data"]["category"]) == -1) {
+                    categories.push(root.leaves()[i]["data"]["category"]);
+                }
+            }
+
+            // console.log(categories);
+
+            let legend = d3.select("#legend");
+
+            let legendItems = legend.selectAll("div")
+            .data(categories)
+            .enter()
+            .append("div")
+            .html((d) => {
+                return `<div class="legend-square" style="background-color: ${color(d)};"></div><p>${d}</p>`;
+            });
         
     });
     
