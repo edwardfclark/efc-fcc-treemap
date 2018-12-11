@@ -2,7 +2,9 @@
 
 const WIDTH = 1300;
 const HEIGHT = 550;
-const PADDING = {top: 50, right: 0, bottom: 0, left: 0}
+const LEGEND_WIDTH = 500;
+const LEGEND_HEIGHT = 400;
+const PADDING = {top: 50, right: 0, bottom: 30, left: 0}
 const PADDING_OUTER = 0;
 const PADDING_INNER = 3;
 
@@ -25,7 +27,7 @@ function buildTreemap(url) {
 
     //Clear the inside of #content right before the fetch.
     document.getElementById("content").innerHTML = "";
-    document.getElementById("legend").innerHTML = "";
+    // document.getElementById("legend").innerHTML = "";
 
     //fetch().then() to create a promise and resolve the code this way.
     window.fetch(url)
@@ -43,7 +45,7 @@ function buildTreemap(url) {
         let name = root.descendants()[0]["data"]["name"];
         let title = d3.select("#content").append("h1").attr("id", "title").text(name);
         let description = d3.select("#content").append("h3").attr("id", "description").text(`Top 100 ${name == "Kickstarter" ? "Most Pledged" : ""} ${name == "Kickstarter" ? "Kickstarter Campaigns" : name == "Movies" ? "Highest Grossing Movies" : "Video Games Sold"} Grouped By ${name == "Kickstarter" ? "Category" : name == "Movies" ? "Genre" : "Platform"}`);
-        const svg = d3.select("#content").append("svg").attr("width", WIDTH).attr("height", HEIGHT).attr("id", "TEST").append("g");
+        const svg = d3.select("#content").append("svg").attr("width", WIDTH).attr("height", HEIGHT+LEGEND_HEIGHT).attr("id", "TEST").append("g");
 
         let nodes = d3.select("svg g")
             .selectAll("g")
@@ -96,18 +98,28 @@ function buildTreemap(url) {
                 }
             }
 
-            // console.log(categories);
 
-            let legend = d3.select("#legend");
+            let legend = d3.select("svg").append("g").attr("id", "legend");
 
-            let legendItems = legend.selectAll("div")
+            let legendRects = legend.selectAll("rect")
             .data(categories)
             .enter()
-            .append("div")
+            .append("rect")
             .attr("class", "legend-item")
-            .html((d) => {
-                return `<div class="legend-square" style="background-color: ${color(d)};"></div><p>${d}</p>`;
-            });
+            .attr("width", 25)
+            .attr("height", 25)
+            .attr("fill", (d) => color(d))
+            .attr("y", HEIGHT+PADDING.bottom)
+            .attr("x", (d,i) => i*50);
+
+            let legendText = legend.selectAll("text")
+            .data(categories)
+            .enter()
+            .append("text")
+            .attr("y", HEIGHT+PADDING.bottom+55)
+            .attr("x", (d,i) => i*50)
+            .text((d) => d);
+           
         
     });
     
