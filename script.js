@@ -1,7 +1,7 @@
 /* Constants for use in D3 */
 
 const WIDTH = 1300;
-const HEIGHT = 600;
+const HEIGHT = 550;
 const PADDING = {top: 50, right: 0, bottom: 0, left: 0}
 const PADDING_OUTER = 0;
 const PADDING_INNER = 3;
@@ -25,6 +25,7 @@ function buildTreemap(url) {
 
     //Clear the inside of #content right before the fetch.
     document.getElementById("content").innerHTML = "";
+    document.getElementById("legend").innerHTML = "";
 
     //fetch().then() to create a promise and resolve the code this way.
     window.fetch(url)
@@ -40,8 +41,8 @@ function buildTreemap(url) {
         console.log(root.leaves());
     
         let name = root.descendants()[0]["data"]["name"];
-        let title = d3.select("#content").append("h1").text(name);
-        let description = d3.select("#content").append("h3").text(`Top 100 ${name == "Kickstarter" ? "Most Pledged" : ""} ${name == "Kickstarter" ? "Kickstarter Campaigns" : name == "Movies" ? "Highest Grossing Movies" : "Video Games Sold"} Grouped By ${name == "Kickstarter" ? "Category" : name == "Movies" ? "Genre" : "Platform"}`);
+        let title = d3.select("#content").append("h1").attr("id", "title").text(name);
+        let description = d3.select("#content").append("h3").attr("id", "description").text(`Top 100 ${name == "Kickstarter" ? "Most Pledged" : ""} ${name == "Kickstarter" ? "Kickstarter Campaigns" : name == "Movies" ? "Highest Grossing Movies" : "Video Games Sold"} Grouped By ${name == "Kickstarter" ? "Category" : name == "Movies" ? "Genre" : "Platform"}`);
         const svg = d3.select("#content").append("svg").attr("width", WIDTH).attr("height", HEIGHT).attr("id", "TEST").append("g");
 
         let nodes = d3.select("svg g")
@@ -56,11 +57,15 @@ function buildTreemap(url) {
             .attr("height", (d) => d.y1-d.y0)
             .attr("fill", (d) => color(d.data.category))
             .style("opacity", 1)
+            .attr("class", "tile")
+            .attr("data-name", (d) => d.data.name)
+            .attr("data-category", (d) => d.data.category)
+            .attr("data-value", (d) => d.data.value)
             .on("mouseover", (d) => {
                 let data = d.data;
                 tooltipDiv.transition().duration(100).style("opacity", 1);
                 tooltipDiv.html(generateTooltip(data))
-                // .attr(/*data attributes*/)
+                .attr("data-value", data.value)
                    .style("left", (d3.event.pageX)+"px")
                    .style("top", (d3.event.pageY-tooltipHeight)+"px");
             })
@@ -99,6 +104,7 @@ function buildTreemap(url) {
             .data(categories)
             .enter()
             .append("div")
+            .attr("class", "legend-item")
             .html((d) => {
                 return `<div class="legend-square" style="background-color: ${color(d)};"></div><p>${d}</p>`;
             });

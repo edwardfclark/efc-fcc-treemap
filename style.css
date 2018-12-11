@@ -53,6 +53,25 @@ text {
 }
 
 .legend-square {
-    width: 15px;
-    height: 15px;
+    width: 25px;
+    height: 25px;
+}
+
+#legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 500px;
+    margin: 0 auto;
+    margin-top: 15px;
+}
+
+.legend-item {
+    display: grid;
+    grid-template-columns: 25px 1fr;
+    height: 25px;
+    margin-top: 10px;
+}
+
+.legend-item p {
+    margin: 0 0 0 10px;
 }
